@@ -41,7 +41,7 @@ The newest version [SAM2](https://arxiv.org/pdf/2408.00714) has increased perfor
 
 **Importing the libraries**
 
-```
+```python
 from PIL import Image
 from lang_sam import LangSAM
 import numpy as np
@@ -56,7 +56,7 @@ text_prompt = "person."
 **Defining the evaluation function**
 The evaluation method that we are using is the [Intersection Over Union](https://huggingface.co/learn/computer-vision-course/en/unit6/basic-cv-tasks/segmentation#how-to-evaluate-a-segmentation-model). It is common to use this metric (the ratio between the intersection of the predicted and true mask) divided by the union of the two. The closer the result is to 1 then then the closer the two masks are to be the same.
 
-```
+```python
 def  intersection_over_union_metric(predicted_mask, true_mask):
 	predicted_mask = predicted_mask.astype(bool)
 	true_mask = true_mask.astype(bool)
@@ -71,7 +71,7 @@ def  intersection_over_union_metric(predicted_mask, true_mask):
 **Picking Function**
 We define this small function to find the index of the best mask from the model output.
 
-```
+```python
 def pick_best(masks, masks_scores, scores)
 	max_index = 0
 	for i, predicted_mask in  enumerate(masks):
@@ -84,7 +84,7 @@ def pick_best(masks, masks_scores, scores)
 **Defining the evaluation function**
 This function is the evaluation loop that we'll use to evaluate the results of the model.
 
-```
+```python
 def  evaluate_model_on_test_set(test_images_dir='./test_images',
 test_masks_dir='./test_masks',
 text_prompt="person.",
@@ -152,7 +152,7 @@ evaluation_function=intersection_over_union_metric
 
 **Run the evaluation loop**
 
-```
+```python
 test_images_dir = './segmentation_full_body_mads_dataset_1192_img/segmentation_full_body_mads_dataset_1192_img/images'
 test_masks_dir = './segmentation_full_body_mads_dataset_1192_img/segmentation_full_body_mads_dataset_1192_img/masks'
 text_prompt = "person."
@@ -167,7 +167,7 @@ We get an average score of **0.8001** when we run the evaluation loop, which is 
 **Exploring the lowest performing images**
 We can use this code snippet in order to obtain the worst performing images and see if there is something we can do to improve the performance.
 
-```
+```python
 # Sort the iou_results by IoU in ascending order
 sorted_iou_results = sorted(iou_results, key=lambda x: x['iou'])
 
@@ -186,7 +186,7 @@ Unfortunately as it is often the case when working with ML models, we got some f
 **Updating The Picking Function**
 We can use both the information from the SAM2 model and the GroundedDino model in order to be able to get a more accurate selection. This modified function will make it so that we only pick the object that both of the scores of the models agree.
 
-```
+```python
 def pick_best(masks, masks_scores, scores)
 	max_index = 0
 	for i, predicted_mask in  enumerate(masks):
@@ -221,7 +221,7 @@ We can observe the selection of the inaccurate contour:
 **Let's modify the Eval Function function**
 One solution to this problem is to find the contour of the ground truth mask and discount the value of that contour. Basically, lowering the weight of the contour. This function implements this functionality, and if we wanted to restore the old functionality we can set up the threshold to be equal to zero.
 
-```
+```python
 def  get_contour_mask(true_mask_np):
 	h, w = true_mask_np.shape[-2:]
 	temp_mask = true_mask_np.astype(np.uint8)
