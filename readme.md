@@ -260,7 +260,7 @@ def show_masks(image, masks, scores, point_coords=None, box_coords=None, input_l
         plt.show()
 ```
 
-`Lets pick one of the lower performing images`
+**Lets pick one of the lower performing images**
 
 ```python
 image_file = "Jazz_Jazz2_C1_00630.png"
