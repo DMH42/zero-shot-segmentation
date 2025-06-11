@@ -276,7 +276,7 @@ scores = result[0]['scores']
 boxes = result[0]['boxes']
 masks = result[0]['masks']
 mask_scores = result[0]['mask_scores']
-show_masks(image_pil, results[0]['masks'], results[0]['scores'])
+show_masks(image_pil, masks, scores)
 ```
 
 In this case, the model correctly identified an object that is shaped like a person but is not a real person.
